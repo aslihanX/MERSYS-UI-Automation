@@ -132,7 +132,7 @@ public class HomePage extends BasePage {
         }
 
         wait.until(ExpectedConditions.visibilityOf(element));
-        Assert.assertTrue(element.isDisplayed(), menu + " is not visible");
+        Assert.assertTrue(isDisplayed(element), menu + " is not visible");
 
         wait.until(ExpectedConditions.elementToBeClickable(element));
         Assert.assertTrue(element.isEnabled(), menu + " is not clickable");
