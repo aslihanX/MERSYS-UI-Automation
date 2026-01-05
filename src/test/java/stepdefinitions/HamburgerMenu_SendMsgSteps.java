@@ -11,20 +11,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import pages.HamburgerMenuPage;
 import pages.SubmissionPage;
-import pages.base.BasePage;
 import utils.BaseDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 public class HamburgerMenu_SendMsgSteps {
     private static final Logger LOGGER = LogManager.getLogger(HamburgerMenu_SendMsgSteps.class);
     HamburgerMenuPage hp = new HamburgerMenuPage(BaseDriver.getDriver());
     SubmissionPage submissionPage = new SubmissionPage(BaseDriver.getDriver());
-
-    // NOT: Duplicate hatası almamak için Hamburger Menu tıklama
-    // ve Messaging hover adımlarını buradan kaldırdım.
-    // O adımları diğer StepDef sınıfın hallediyor.
 
     @Then("a text editor pop-up should be displayed")
     public void a_text_editor_pop_up_should_be_displayed() {
@@ -145,13 +138,9 @@ public class HamburgerMenu_SendMsgSteps {
     public void theUserClicksOnTheLinkAndThenLink(String arg0, String arg1) {
 
         hp.clickElement(hp.messaging);
-
-        // 3. Outbox linki görünür ve tıklanabilir olana kadar bekle, sonra tıkla
-        // (hp.outbox);
         hp.wait(3);
         hp.clickElement(hp.outbox);
     }
-
 
     @Then("the message with subject {string} should be visible in the Outbox list")
     public void the_message_with_subject_should_be_visible_in_the_outbox_list(String subjectText) {
@@ -161,6 +150,4 @@ public class HamburgerMenu_SendMsgSteps {
                 .anyMatch(row -> row.getText().contains(subjectText));
         Assert.assertTrue(isfound, "Gönderilen mesaj Outbox'ta bulunamadı!");
     }
-
-
 }
