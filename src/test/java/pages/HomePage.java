@@ -58,6 +58,12 @@ public class HomePage extends BasePage {
     @FindBy(css = ".cdk-overlay-pane .mat-mdc-menu-panel")
     private WebElement profileSettingsMenu;
 
+    @FindBy(xpath = "//div[contains(@class,'mat-mdc-menu-panel')]//button[.//span[normalize-space()='Finance']]\n ")
+    private WebElement hamburgerFinanceItem;
+
+    @FindBy(xpath = "//div[contains(@class,'mat-mdc-menu-panel')]//button[.//span[normalize-space()='My Finance']]")
+    private WebElement hamburgerMyFinanceItem;
+
 
 
     public HomePage(WebDriver driver) {
@@ -269,4 +275,54 @@ public class HomePage extends BasePage {
                 throw new RuntimeException("Unknown menu action: " + menu);
         }
     }
+
+    public void clickHamburgerMenuItem(String item) {
+        LOGGER.info("Clicking item on Hamburger menu: {}", item);
+
+        switch (item.toLowerCase()) {
+            case "finance":
+
+                Assert.assertTrue(isDisplayed(hamburgerMenuPanel), "Hamburger menu panel is not opened!");
+                wait.until(ExpectedConditions.elementToBeClickable(hamburgerFinanceItem));
+                clickElement(hamburgerFinanceItem);
+                LOGGER.debug("Clicked Finance on Hamburger menu");
+                break;
+
+            default:
+                LOGGER.error("Invalid hamburger menu item provided: {}", item);
+                throw new RuntimeException("Unknown hamburger menu item: " + item);
+        }
+    }
+
+    public void openHamburgerMenu() {
+        LOGGER.info("Opening Hamburger menu");
+        clickElement(hamburgerMenuLogo);
+        wait.until(ExpectedConditions.visibilityOf(hamburgerMenuPanel));
+    }
+
+    public boolean isHamburgerMenuOpened() {
+        LOGGER.info("Checking if Hamburger menu is opened");
+        try {
+            return isDisplayed(hamburgerMenuPanel);
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public void clickFinanceFromHamburger() {
+        LOGGER.info("Clicking Finance from Hamburger menu");
+        Assert.assertTrue(isHamburgerMenuOpened(), "Hamburger menu is not opened!");
+
+        wait.until(ExpectedConditions.elementToBeClickable(hamburgerFinanceItem));
+        clickElement(hamburgerFinanceItem);
+
+        LOGGER.debug("Clicked Finance menu item");
+    }
+
+    public void clickMyFinanceFromHamburger() {
+        wait.until(ExpectedConditions.elementToBeClickable(hamburgerMyFinanceItem));
+        clickElement(hamburgerMyFinanceItem);
+    }
+
+
 }
