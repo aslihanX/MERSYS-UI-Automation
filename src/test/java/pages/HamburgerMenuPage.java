@@ -26,8 +26,6 @@ public class HamburgerMenuPage extends BasePage {
     public WebElement receiversIcon;
     @FindBy(xpath = "//div[@class='mat-mdc-form-field-infix']/input")
     public WebElement addReceivers;
-    @FindBy(xpath = "(//div[@class='mdc-checkbox'])[2]")
-    public WebElement square;
     @FindBy(xpath = "//*[text()='Add & Close']")
     public WebElement addClose;
     @FindBy(css = "input[placeholder='Subject']")
@@ -52,20 +50,24 @@ public class HamburgerMenuPage extends BasePage {
 
     @FindBy(xpath = "//*[text()=' Delete ']")
     public WebElement deleteButon;
-    //@FindBy(xpath = "//ms-standard-button[@id='ms-standard-button-42']")
-
-
     @FindBy(xpath = "//ms-standard-button[@icon='trash-restore']//button")
     public List<WebElement> restoreButtonList;
-
     @FindBy(xpath = "//ms-delete-button//button")
     public List<WebElement> trashCanButtonList;
-
     @FindBy(xpath = "//div[contains(text(),'delete')]")
     public WebElement deleteMsg;
-
-    @FindBy(xpath = "//div[contains(text(),'successfully')]")
+    @FindBy(xpath = "//div[contains(text(),'Success') or contains(text(),'successfully')]")
     public WebElement successMessage;
+    @FindBy(xpath = "(//button[@confirm and contains(@class, 'error')])[1]")
+    public WebElement rubbish;
+    @FindBy(xpath = "//button[@type='submit']")
+    public WebElement yesButton;
+    @FindBy(xpath = "//*[contains(text(),'move') and contains(text(),'trash')]")
+    public WebElement outboxConfirmMsg;
+    @FindBy(xpath = "//span[contains(text(),'Outbox')]")
+    public WebElement confirmOutbox;
+
+
 
 
 
