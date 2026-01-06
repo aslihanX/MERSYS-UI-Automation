@@ -36,17 +36,6 @@ public class ProfileFeaturePage extends BasePage {
     @FindBy(css = "mat-option span.mdc-list-item__primary-text")
     public List<WebElement> themeOptions;
 
-
-
-
-
-
-
-
-
-
-
-
     public ProfileFeaturePage(WebDriver driver) {
         super(driver);
     }
