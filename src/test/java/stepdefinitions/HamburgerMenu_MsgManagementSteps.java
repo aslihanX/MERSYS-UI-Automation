@@ -19,57 +19,58 @@ public class HamburgerMenu_MsgManagementSteps {
 
     private static final Logger LOGGER = LogManager.getLogger(HamburgerMenu_MsgManagementSteps.class);
 
-    // Assuming you have a Driver utility to get the singleton driver
     WebDriver driver = BaseDriver.getDriver();
     HamburgerMenuPage hp = new HamburgerMenuPage(driver);
     Actions actions = new Actions(driver);
 
     @When("the user clicks on the {string} icon")
     public void the_user_clicks_on_the_icon(String iconName) {
-        LOGGER.info("Adım: Hamburger menü ikonuna tıklanıyor.");
+        LOGGER.info("STEP: Clicking on the Hamburger Menu icon.");
         hp.clickElement(hp.hamburgerMenu);
     }
 
     @When("the user hovers over the {string} menu item")
     public void the_user_hovers_over_the_menu_item(String menuName) {
-        LOGGER.info("Adım: {} menü öğesinin üzerine geliniyor (hover).", menuName);
+        LOGGER.info("STEP: Hovering over the '{}' menu item.", menuName);
         hp.wait.until(ExpectedConditions.visibilityOf(hp.messaging));
         actions.moveToElement(hp.messaging).perform();
+        LOGGER.debug("Hover action performed on messaging element.");
     }
 
     @Then("the following sub-menu options should be visible:")
     public void verify_sub_menu_options(io.cucumber.datatable.DataTable dataTable) {
-        LOGGER.info("Adım: Alt menü öğelerinin görünürlüğü doğrulanıyor.");
+        LOGGER.info("STEP: Verifying visibility of sub-menu options.");
 
         WebDriverWait wait = new WebDriverWait(BaseDriver.getDriver(), Duration.ofSeconds(15));
 
-        Assert.assertTrue(hp.isDisplayed(hp.inbox));
-        LOGGER.info("Görünürlük Doğrulandı: Inbox");
-        Assert.assertTrue(hp.isDisplayed(hp.outbox));
-        LOGGER.info("Görünürlük Doğrulandı: Outbox");
+        Assert.assertTrue(hp.isDisplayed(hp.inbox), "Inbox option is not visible!");
+        LOGGER.info("Verification Passed: Inbox is visible.");
+
+        Assert.assertTrue(hp.isDisplayed(hp.outbox), "Outbox option is not visible!");
+        LOGGER.info("Verification Passed: Outbox is visible.");
 
         wait.until(ExpectedConditions.visibilityOf(hp.trash));
-        LOGGER.info("Trash öğesi görünür hale geldi.");
+        LOGGER.info("DEBUG: Trash element became visible after wait.");
 
-        Assert.assertTrue(hp.isDisplayed(hp.trash));
-        LOGGER.info("Görünürlük Doğrulandı: Trash");
+        Assert.assertTrue(hp.isDisplayed(hp.trash), "Trash option is not visible!");
+        LOGGER.info("Verification Passed: Trash is visible.");
 
-        // Logical check for the Naming Bug
+        // Checking for the Naming Bug
         String actualText = hp.sendMessage.getText();
-        LOGGER.info("Sistemden okunan buton metni: '{}'", actualText);
-        System.out.println("Actual Text Found: " + actualText);
-        // This will fail as intended to report the bug!
-        // Eğer beklenen "New Message" değilse, assertion'dan önce loga bir uyarı düşelim
-        if (!actualText.equals("New Message")) {
-            LOGGER.warn("!!! BUG TESPİT EDİLDİ: Gereksinim 'New Message' bekliyor, ancak sistemde '{}' yazıyor.", actualText);
+        LOGGER.info("INFO: Text retrieved from system button: '{}'", actualText);
+
+        // Logical check for the Naming Bug reporting
+        if (!"New Message".equals(actualText)) {
+            LOGGER.error("!!! BUG DETECTED: Requirement expects 'New Message', but found '{}' in the system.", actualText);
         }
 
-        Assert.assertEquals("New Message", actualText);
+        Assert.assertEquals(actualText, "New Message", "The button text does not match the requirement!");
     }
 
     @And("the user clicks on the {string} link")
     public void click_on_link(String linkName) {
-        LOGGER.info(">>> Adım: '{}' bağlantısına tıklanıyor.", linkName);
+        LOGGER.info("STEP: Clicking on the '{}' link.", linkName);
         hp.clickElement(hp.sendMessage);
+        LOGGER.debug("Click action executed on sendMessage element.");
     }
 }

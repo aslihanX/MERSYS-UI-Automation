@@ -1,6 +1,8 @@
 package stepdefinitions;
 
 import io.cucumber.java.en.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -11,90 +13,93 @@ import java.time.Duration;
 
 public class Profile_FeatureSteps {
 
+    private static final Logger LOGGER = LogManager.getLogger(Profile_FeatureSteps.class);
     private final WebDriver driver = BaseDriver.getDriver();
     private final ProfileFeaturePage pfp = new ProfileFeaturePage(driver);
     private final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
     @Given("the user navigates to {string} > {string}")
     public void navigatesToProfileSettings(String menu, String submenu) {
-        System.out.println("--- STEP: Navigation to Profile > Settings Started ---");
+        LOGGER.info("STEP: Navigating to Profile > Settings.");
         wait.until(ExpectedConditions.elementToBeClickable(pfp.profileSettingsButton));
         pfp.clickElement(pfp.profileSettingsButton);
-        System.out.println("DEBUG: Profile menu expanded.");
+        LOGGER.debug("Profile menu button clicked.");
 
         wait.until(ExpectedConditions.elementToBeClickable(pfp.settingsButton));
         pfp.clickElement(pfp.settingsButton);
-        System.out.println("DEBUG: Navigated to Settings page.");
+        LOGGER.info("Successfully navigated to the Settings page.");
     }
 
     @When("the user clicks on the profile picture placeholder")
     public void clicksOnAvatar() {
-        System.out.println("--- STEP: Clicking on avatar placeholder ---");
+        LOGGER.info("STEP: Clicking on the profile picture placeholder.");
         wait.until(ExpectedConditions.elementToBeClickable(pfp.uploadPicture));
         pfp.clickElement(pfp.uploadPicture);
     }
 
     @And("the user clicks the {string} button to select a picture")
     public void readyForSelection(String btnName) {
-        System.out.println("DEBUG: Ready for file selection (Mac OS Bypass enabled).");
+        LOGGER.debug("INFO: System ready for file selection. Bypassing OS file picker for Mac compatibility.");
     }
 
     @And("the user selects a profile picture from path {string}")
     public void selectsProfilePicture(String relativePath) {
         String fullPath = System.getProperty("user.dir") + relativePath;
-        System.out.println("DEBUG: Constructing file path: " + fullPath);
+        LOGGER.info("STEP: Uploading picture from path: {}", fullPath);
 
         try {
             WebElement fileInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[type='file']")));
             fileInput.sendKeys(fullPath);
-            System.out.println("INFO: File path successfully injected into hidden input.");
+            LOGGER.info("SUCCESS: File path successfully injected into the hidden file input.");
         } catch (TimeoutException e) {
-            System.err.println("ERROR: File input (type='file') not found in DOM!");
-            Assert.fail("File input element could not be located.");
+            LOGGER.error("CRITICAL: File input (type='file') not found in DOM!");
+            Assert.fail("Failed to locate the file input element.");
         }
     }
 
     @Then("the user should see the size of the uploaded picture")
     public void verifyFileSize() {
-        System.out.println("--- STEP: Verifying file size visibility ---");
+        LOGGER.info("STEP: Verifying visibility of the uploaded file size.");
         wait.until(ExpectedConditions.visibilityOf(pfp.fileSizeText));
         String size = pfp.fileSizeText.getText();
-        System.out.println("INFO: Detected File Size: " + size);
-        Assert.assertTrue(pfp.fileSizeText.isDisplayed(), "File size text is not visible!");
+        LOGGER.info("Retrieved file size: {}", size);
+        Assert.assertTrue(pfp.fileSizeText.isDisplayed(), "File size label is not visible!");
     }
 
     @When("the user clicks the {string} button to confirm upload")
     public void confirmUpload(String btnName) {
-        System.out.println("--- STEP: Confirming upload in modal ---");
+        LOGGER.info("STEP: Clicking the '{}' button in the upload modal.", btnName);
         wait.until(ExpectedConditions.elementToBeClickable(pfp.confirmUploadBtn));
         pfp.clickElement(pfp.confirmUploadBtn);
 
-        System.out.println("DEBUG: Waiting 3 seconds for server-side processing...");
+        LOGGER.debug("Waiting 3 seconds for backend server synchronization.");
         try {
             Thread.sleep(3000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.warn("Wait interrupted: {}", e.getMessage());
+            Thread.currentThread().interrupt();
         }
     }
 
     @And("the user see {string} button on the page and click it")
     public void clickSave(String btnName) {
-        System.out.println("--- STEP: Clicking main Save button ---");
+        LOGGER.info("STEP: Clicking the main '{}' button on the settings page.", btnName);
         wait.until(ExpectedConditions.elementToBeClickable(pfp.saveBtn));
 
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", pfp.saveBtn);
-        System.out.println("DEBUG: Save button clicked via JavaScript.");
+        LOGGER.debug("Save button clicked via JavaScript to ensure execution.");
     }
 
     @Then("the {string} message should be displayed")
     public void verifySuccessMessage(String expectedMessage) {
-        System.out.println("--- STEP: Verifying success message ---");
+        LOGGER.info("STEP: Verifying display of the success notification.");
         wait.until(ExpectedConditions.visibilityOf(pfp.successMessage));
         String actualMsg = pfp.successMessage.getText();
-        System.out.println("INFO: Toast message received: " + actualMsg);
+        LOGGER.info("Toast notification received: '{}'", actualMsg);
 
         Assert.assertTrue(actualMsg.toLowerCase().contains("success"),
-                "Actual message does not contain 'success'. Received: " + actualMsg);
-        System.out.println("--- SCENARIO COMPLETED SUCCESSFULLY ---");
+                "Success message was not detected! Received: " + actualMsg);
+        LOGGER.info("SCENARIO COMPLETED: Profile picture update verified.");
     }
 }
+
