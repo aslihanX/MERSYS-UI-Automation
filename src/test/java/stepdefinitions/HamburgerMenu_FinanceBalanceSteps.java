@@ -27,7 +27,6 @@ public class HamburgerMenu_FinanceBalanceSteps {
         financePage.verifyStudentFeePageOpened();
     }
 
-
     @And("User clicks on Fee Balance Detail tab")
     public void userClicksOnFeeBalanceDetailTab() {
         paymentPage.clickFeeBalanceDetailTab();
