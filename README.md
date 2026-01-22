@@ -45,3 +45,11 @@ Generate and serve report:
 mvn clean test
 mvn allure:serve 
 ```
+
+---
+
+## Contributors
+
+- **Ruya Tiras - @tirasruya**
+- **Aslihan Gulluoglu - @aslihanX**
+- **Taner Ozcelik - @tanerozc**
