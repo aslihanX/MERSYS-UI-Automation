@@ -6,9 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import pages.base.BasePage;
-
 import java.util.Objects;
-
 import static utils.BaseDriver.getDriver;
 
 public class HomePage extends BasePage {
@@ -326,6 +324,4 @@ public class HomePage extends BasePage {
         wait.until(ExpectedConditions.elementToBeClickable(calendarLogo));
         clickElement(calendarLogo);
     }
-
-
 }

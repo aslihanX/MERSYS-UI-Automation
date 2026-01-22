@@ -6,7 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import pages.base.BasePage;
-
 import static utils.BaseDriver.getDriver;
 
 public class SubmissionPage extends BasePage {
@@ -44,7 +43,6 @@ public class SubmissionPage extends BasePage {
     }
 
     public boolean isTextEditorVisible() {
-
         return isDisplayed(textEditorIframe);
     }
 

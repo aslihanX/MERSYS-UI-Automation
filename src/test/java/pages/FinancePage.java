@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import pages.base.BasePage;
 import utils.BaseDriver;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -22,7 +21,6 @@ import java.util.Optional;
 public class FinancePage extends BasePage {
 
     WebDriver driver = BaseDriver.getDriver();
-
 
     public FinancePage(WebDriver driver) {
         super(driver);
@@ -55,12 +53,10 @@ public class FinancePage extends BasePage {
     private final By pdfOptionBtn =
             By.xpath("//div[contains(@class,'mat-mdc-menu-panel')]//span[normalize-space()='Pdf Export']/ancestor::button[1]");
 
-
     public void verifyStudentFeePageOpened() {
         wait.until(d -> studentsFeesHeader.isDisplayed());
         Assert.assertTrue(studentsFeesHeader.isDisplayed(), "Student Fee page is not opened");
     }
-
 
     public void clickStudentRowByName(String name) {
         By studentName = By.xpath("//td[contains(@class,'mat-column-student')]//span[normalize-space()='" + name + "']");
@@ -69,14 +65,12 @@ public class FinancePage extends BasePage {
         wait.until(ExpectedConditions.elementToBeClickable(el)).click();
     }
 
-
     public void verifyFinancePageOpened() {
         LOGGER.info("Verifying Student Finance page is opened");
         wait.until(ExpectedConditions.visibilityOf(studentsFeesHeader));
         Assert.assertTrue(studentsFeesHeader.isDisplayed(),
                 "Student Finance page is not opened");
     }
-
 
     public boolean isFinancePageOpened() {
         try {
@@ -96,6 +90,7 @@ public class FinancePage extends BasePage {
 
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", reportOptionsMenuBtn);
     }
+
     public void downloadReport(String type) {
         String t = type.trim().toLowerCase(Locale.ROOT);
 
@@ -113,7 +108,6 @@ public class FinancePage extends BasePage {
         );
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", btn);
     }
-
 
     public boolean isReportDownloaded(String type) {
         String t = type.trim().toLowerCase(Locale.ROOT);
@@ -152,6 +146,4 @@ public class FinancePage extends BasePage {
             Thread.sleep(ms);
         } catch (InterruptedException ignored) {}
     }
-
-
 }

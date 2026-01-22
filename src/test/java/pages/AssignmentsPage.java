@@ -8,11 +8,9 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 import pages.base.BasePage;
-
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
-
 import static utils.BaseDriver.getDriver;
 
 public class AssignmentsPage extends BasePage {
